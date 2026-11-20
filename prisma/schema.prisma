@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("customer")
+  createdAt    DateTime @default(now())
+  cart         Cart?
+  orders       Order[]
+}
+
+model Product {
+  id          String      @id
+  name        String
+  price       Int
+  compareAt   Int?
+  category    String
+  occasions   String
+  badge       String?
+  bestseller  Boolean     @default(false)
+  isNew       Boolean     @default(false)
+  rating      Float
+  reviews     Int
+  stock       Int
+  sku         String      @unique
+  materials   String
+  made        String
+  short       String
+  description String
+  story       String
+  care        String
+  details     String
+  images      String
+  reviewNotes String
+  createdAt   DateTime    @default(now())
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coupon    String     @default("")
+  method    String     @default("studio")
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  note      String  @default("")
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id         String      @id
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  email      String
+  recipient  String
+  phone      String
+  line1      String
+  line2      String      @default("")
+  city       String
+  region     String
+  postal     String
+  country    String
+  note       String      @default("")
+  methodId   String
+  methodLabel String
+  methodDetail String
+  coupon     String      @default("")
+  subtotal   Int
+  discount   Int
+  shipping   Int
+  total      Int
+  status     String      @default("created")
+  paymentId  String      @default("")
+  razorpayOrderId String @default("")
+  placedAt   DateTime    @default(now())
+  items      OrderItem[]
+}
+
+model Category {
+  id    String @id
+  name  String
+  blurb String
+  image String
+}
+
+model Coupon {
+  code      String  @id
+  label     String
+  type      String
+  amount    Int     @default(0)
+  active    Boolean @default(true)
+  createdAt DateTime @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  price     Int
+  quantity  Int
+  note      String  @default("")
+  image     String
+}
