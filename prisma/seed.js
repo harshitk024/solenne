@@ -29,14 +29,13 @@ const rows = catalogProducts.map((product) => ({
   reviewNotes: JSON.stringify(product.reviewsList || []),
 }));
 
-await prisma.orderItem.deleteMany();
-await prisma.order.deleteMany();
-await prisma.cartItem.deleteMany();
-await prisma.cart.deleteMany();
-await prisma.user.deleteMany();
-await prisma.product.deleteMany();
-await prisma.category.deleteMany();
-await prisma.coupon.deleteMany();
+const existing = await prisma.product.count();
+if (existing > 0) {
+  console.log(`Catalogue already has ${existing} products. Seed skipped.`);
+  await prisma.$disconnect();
+  process.exit(0);
+}
+
 await prisma.product.createMany({ data: rows });
 await prisma.category.createMany({
   data: [

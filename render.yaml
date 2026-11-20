@@ -1,10 +1,12 @@
 services:
   - type: web
-    name: solenne-api
+    name: solenne
     runtime: node
     plan: free
-    buildCommand: npm install && npx prisma generate && npx prisma db push && node prisma/seed.js
+    branch: main
+    buildCommand: npm install && npm run build && npx prisma generate && npx prisma db push && node prisma/seed.js
     startCommand: node server/index.js
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         value: file:./dev.db
@@ -12,11 +14,3 @@ services:
         generateValue: true
       - key: NODE_VERSION
         value: "22"
-  - type: web
-    name: solenne
-    runtime: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://solenne-api.onrender.com

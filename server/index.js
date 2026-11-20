@@ -1,5 +1,6 @@
 import "dotenv/config";
 import crypto from "node:crypto";
+import path from "node:path";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -310,6 +311,12 @@ app.get("/api/orders/:id", requireUser, async (req, res) => {
 });
 
 registerAdmin(app);
+
+const client = path.resolve("dist");
+app.use(express.static(client));
+app.get(/^(?!\/api).*/, (_req, res) => {
+  res.sendFile(path.join(client, "index.html"));
+});
 
 const port = Number(process.env.PORT) || 4000;
 app.listen(port, () => {
