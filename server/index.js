@@ -28,7 +28,8 @@ import {
 import { registerAdmin } from "./admin.js";
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigin = process.env.CLIENT_ORIGIN;
+app.use(cors({ origin: allowedOrigin || true, credentials: true }));
 app.post("/api/payments/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const signature = req.get("x-razorpay-signature");
   if (!verifyWebhook(req.body, signature)) return res.status(400).json({ error: "Invalid webhook signature." });
