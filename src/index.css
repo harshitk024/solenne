@@ -27,6 +27,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -37,6 +38,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: 0.01em;
+  overflow-x: hidden;
 }
 
 img {
@@ -1562,6 +1564,69 @@ p {
   .container,
   .nav-inner {
     width: min(var(--max), calc(100% - 32px));
+  }
+
+  .nav-account {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 0;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand {
+    font-size: 1.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-copy {
+    padding: 40px 16px 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.7rem, 14vw, 3.5rem);
+    overflow-wrap: anywhere;
+  }
+
+  .hero-meta {
+    gap: 16px;
+  }
+
+  .split,
+  .product-meta,
+  .price-row,
+  .detail-top,
+  .drawer-head,
+  .checkout-summary .row {
+    min-width: 0;
+  }
+
+  .thumbs {
+    overflow-x: auto;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
+  .panel,
+  .quote-card,
+  .newsletter {
+    padding: 22px 16px;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  a,
+  button {
+    overflow-wrap: anywhere;
   }
 
   .section {
